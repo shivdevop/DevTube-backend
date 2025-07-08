@@ -21,6 +21,9 @@ app.use(express.static("public"))
 
 app.use(cookieParser())
 
+app.get("/ping",(req,res)=>{
+    res.send("pong")
+})
 
 
 export {app}
