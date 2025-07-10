@@ -21,9 +21,15 @@ app.use(express.static("public"))
 
 app.use(cookieParser())
 
-app.get("/ping",(req,res)=>{
-    res.send("pong")
-})
+//router import 
+import userRouter from "./routes/user.routes.js"
 
+//routes declaration
+
+//router ke liye hume middleware ki need hai, so we will use app.use()
+app.use("/api/v1/users",userRouter)
+// /api/v1/users is like a prefix for all the routes in userRouter!!
+
+//http://localhost:8000/api/v1/users/register
 
 export {app}
