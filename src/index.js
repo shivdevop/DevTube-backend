@@ -16,3 +16,5 @@ connectDB().then(()=>{
 })
 //since its a promise returned by connectDB method(async await function), 
 //we can use then and catch to handle the promise 
+
+//hello hi
