@@ -24,13 +24,15 @@ const registerUser= asyncHandler(async (req,res)=>{
     console.log("email",email)
 
     //validation of input
-    const parsed=userRegisterSchema.safeParse(req.body)
+    const parsed=userRegisterSchema.safeParse(
+        {fullname,username,email,password}
+    )
     if (!parsed.success){
         throw new ApiError(400,"INVALID INPUT")
     } 
 
     //check if user already exists
-    const existingUser=User.findOne({
+    const existingUser=await User.findOne({
         $or:[{username},{email}]
     })
     if (existingUser){
@@ -44,7 +46,7 @@ const registerUser= asyncHandler(async (req,res)=>{
 
     const avatarLocalPath=req.files?.avatar[0]?.path
     const coverImageLocalPath=req.files?.coverImage[0]?.path
-
+    console.log(avatarLocalPath, coverImageLocalPath)
     if (!avatarLocalPath){
         throw new ApiError(400,"avatar is required for registration")
     }
@@ -52,7 +54,7 @@ const registerUser= asyncHandler(async (req,res)=>{
     //we need to upload the files to cloudinary
     const avatarResponse=await uploadOnCloudinary(avatarLocalPath)
     const coverImageResponse=await uploadOnCloudinary(coverImageLocalPath)
-
+   console.log(avatarResponse)
     if (!avatarResponse){
         throw new ApiError(500,"avatar upload failed on cloudinary")
     }
