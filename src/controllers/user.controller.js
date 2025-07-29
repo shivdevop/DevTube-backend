@@ -13,7 +13,8 @@ const generateAccessAndRefreshTokens= async (userId)=>{
     const refreshToken=user.generateRefreshToken()
     user.refreshToken =refreshToken 
     await user.save({validateBeforeSave: false}) //save the refresh token in database
-    
+    //don't ask for password validation here, as we are not changing the password 
+
     return {accessToken,refreshToken}
 
 
@@ -115,7 +116,7 @@ const loginUser= asyncHandler(async(req,res)=>{
     const {email,username,password}=req.body
 
     //check is username or email is provided 
-    if (!username || !email){
+    if (!(username || email)){
         throw new ApiError(400,"username or email is required ")
     }
 
@@ -159,8 +160,37 @@ const loginUser= asyncHandler(async(req,res)=>{
 
 })
 
+
+
 const logoutUser=asyncHandler(async(req,res)=>{
+
+    //now we have access to user object from verifyUser middleware 
+
+    // await User.findByIdAndUpdate(req.user._id,{
+    //     $set:{
+    //         refreshToken:undefined
+    //     }},
+    //     {
+    //         new:true
+    //     }
+    // )
+
+    await User.findByIdAndUpdate(
+    req.user._id,
+    { $unset: { refreshToken: "" } },
+    { new: true }
+  );
+
+
+        const options ={
+        httpOnly:true,
+        secure:true 
+        }
+
+    return res.status(200).clearCookie("accessToken",options)
+    .clearCookie("refreshToken",options).json(new ApiResponse(200,{},"user logged out ")) 
+
     
 })
 
-export {registerUser}
+export {registerUser,loginUser,logoutUser}
