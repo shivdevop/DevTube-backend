@@ -247,7 +247,135 @@ const logoutUser=asyncHandler(async(req,res)=>{
 })
 
 
+//change user password function 
+const changeUserPassword=asyncHandler(async(req,res)=>{
+    //if user if logged in, then auth middleware has run and user object is attached to req object 
+
+    const {currentPassword,newPassword}=req.body
+
+    if (!currentPassword || !newPassword){
+        throw new ApiError(400,"current and new password are required")
+    }
+
+    const user=await User.findById(req.user._id)
+    const ispasswordCorrect=await user.isPasswordCorrect(currentPassword)
+
+    if (!ispasswordCorrect){
+        throw new ApiError(401,"current password is incorrect")
+    }
+
+    //set new password 
+    user.password=newPassword 
+    await user.save({validateBeforeSave:false})
+
+    //send response 
+    return res.status(200).json(
+        new ApiResponse(200,{},"password changed successfully")
+    )
+
+})
+
+//if user is logged in, then auth middleware has run and we have access to current user
+
+const getCurrentUser=asyncHandler(async(req,res)=>{
+    return res.status(200).json(
+        new ApiResponse(200,req.user,"current user fetched ")
+    )
+})
+
+const updateAccountDetails=asyncHandler(async(req,res)=>{
+    const {fullname,email}=req.body
+
+    if (!fullname && !email){
+        throw new ApiError(400,"no update data provided")
+    }
+
+
+    //find the user by id
+    const user=await User.findById(req.user?._id)
+
+    if(!user){
+        throw new ApiError(404,"user not found")
+    }
+
+    //check for email uniqueness 
+    if (email && email!==user.email){
+        const existingEmailUser=await User.findOne({email})
+        if (existingEmailUser){
+            throw new ApiError(409,"email already in use")
+        }
+        user.email=email
+    }
+
+    if (fullname){
+        user.fullname=fullname
+    }
+
+    await user.save({validateBeforeSave:false})
+    user.password = undefined;
+    user.refreshToken = undefined;
+
+    
+    //no need to query the db again
+    // const updatedUser=await User.findById(user._id).select("-password -refreshToken")
+     
+    res.status(200).json(
+        new ApiResponse(200,user,"account details updated successfully")
+    )
+
+})
+
+const updateUserAvatar=asyncHandler(async(req,res)=>{
+    
+    //multer middleware will handle the file upload and we will get the file in req.files
+    const avatarLocalPath=req.file?.path
+    if(!avatarLocalPath){
+        throw new ApiError(400,"Avatar is missing")
+    }
+
+    const avatarResponse=await uploadOnCloudinary(avatarLocalPath)
+    if (!avatarResponse.url){
+        throw new ApiError(400,"error uploading avatar to cloudinary")
+    }
+
+    const user=await User.findByIdAndUpdate(req.user?._id,{
+       $set:{
+        avatar:avatarResponse.url
+       }
+    },
+    {new:true}).select("-password -refreshToken")
+
+    res.status(200).json(
+        new ApiResponse(200,user,"avatar updated successfully")
+    )
+})
 
 
 
-export {registerUser,loginUser,logoutUser,refreshAccessToken}
+const updateUserCoverImage=asyncHandler(async(req,res)=>{
+    
+    //multer middleware will handle the file upload and we will get the file in req.files
+    const coverImageLocalPath=req.file?.path
+    if(!coverImageLocalPath){
+        throw new ApiError(400,"cover image file is missing")
+    }
+
+    const coverImageResponse=await uploadOnCloudinary(coverImageLocalPath)
+    if (!coverImageResponse.url){
+        throw new ApiError(400,"error uploading cover image to cloudinary")
+    }
+
+    const user=await User.findByIdAndUpdate(req.user?._id,{
+       $set:{
+        coverImage:coverImageResponse.url
+       }
+    },
+    {new:true}).select("-password -refreshToken")
+
+    return res.status(200).json(
+        new ApiResponse(200,user,"cover image updated successfully")
+    )
+})
+
+
+export {registerUser,loginUser,logoutUser,refreshAccessToken,changeUserPassword,getCurrentUser,updateAccountDetails,updateUserAvatar,updateUserCoverImage}
