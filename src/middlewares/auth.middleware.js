@@ -11,7 +11,7 @@ export const verifyUser = asyncHandler(async(req,res,next)=>{
      const token=req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","")
  
      if (!token){
-         throw new ApiError(4001,"Unauthorized request")
+         throw new ApiError(401,"Unauthorized request")
      }
      
      //if token is present, verify it 

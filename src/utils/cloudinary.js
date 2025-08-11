@@ -1,5 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary';
-import fs from "fs"
+import fs from "fs" //importing fs to delete local files after upload
 import dotenv from "dotenv";
 dotenv.config(); // ✅ ensures env vars are available here
 
