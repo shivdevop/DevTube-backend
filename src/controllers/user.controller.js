@@ -4,6 +4,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { userRegisterSchema } from "../validators/user.validation.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import mongoose from "mongoose";
+
 import jwt from "jsonwebtoken"
 
 const generateAccessAndRefreshTokens= async (userId)=>{
@@ -114,6 +116,7 @@ const loginUser= asyncHandler(async(req,res)=>{
     //send response with user details and tokens in secure cookies 
 
     const {email,username,password}=req.body
+    console.log(req.body)
 
     //check is username or email is provided 
     if (!(username || email)){
@@ -443,7 +446,7 @@ const getUserChannelProfile=asyncHandler(async(req,res)=>{
             }
         }
     ])
-    
+
     //we are getting array of objects, here we are getting only one object
 
     if (!channel || channel.length===0){
@@ -456,6 +459,58 @@ const getUserChannelProfile=asyncHandler(async(req,res)=>{
 
 })
 
+const getWatchHistory=asyncHandler(async(req,res)=>{
+    //we will use aggregation to get the watch history 
+
+    const user=await User.aggregate([
+        {
+            $match:{
+                _id: new mongoose.Types.ObjectId(req.user._id)
+            }
+        },{
+            $lookup:{
+                from:"videos",
+                localField:"watchHistory",
+                foreignField:"_id",
+                as:"watchHistoryVideos",
+                pipeline:[
+                    //we are inside videos collection
+                    {
+                        $lookup:{
+                            from:"users",
+                            localField:"owner",
+                            foreignField:"_id",
+                            as:"uploaderDetails",
+                            //we don't want all details of the uploader
+                            pipeline:[
+                                {
+                                    $project:{
+                                        username:1,
+                                        avatar:1
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    // This turns uploaderDetails array into a single object
+                   { $unwind: "$uploaderDetails" }
+                ]
+            }
+        }
+    ])
+
+    if (!user || user.length===0){
+        throw new ApiError(404,"user not found")
+    }
+
+    res.status(200).json(
+    new ApiResponse(200, user[0].watchHistoryVideos, "Watch history fetched successfully")
+  )
+
+})
+
+
+
 
 
 export {registerUser,
@@ -467,4 +522,5 @@ export {registerUser,
          updateAccountDetails,
          updateUserAvatar,
          updateUserCoverImage,
-         getUserChannelProfile}
+         getUserChannelProfile,
+        getWatchHistory}

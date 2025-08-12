@@ -1,5 +1,5 @@
 import {Router} from "express"
-import { registerUser } from "../controllers/user.controller.js"
+import { changeUserPassword, getCurrentUser, getUserChannelProfile, getWatchHistory, registerUser, updateAccountDetails, updateUserAvatar } from "../controllers/user.controller.js"
 import { upload } from "../middlewares/multer.middleware.js"
 import { loginUser } from "../controllers/user.controller.js"
 import { verifyUser } from "../middlewares/auth.middleware.js"
@@ -27,9 +27,17 @@ router.route("/login").post(loginUser)
 //secured route
 //we will user verifyUser middleware to protect this route
 
-
 router.route("/logout").post(verifyUser,logoutUser)
-router.route("/refresh-token").post(refreshAccessToken)
-
+router.route("/refresh-access-token").put(refreshAccessToken)
+router.route("/change-password").post(verifyUser,changeUserPassword)
+router.route("/current-user").get(verifyUser,getCurrentUser)
+router.route("/update-account-details").put(verifyUser,updateAccountDetails)
+router.route("/update-avatar").put(
+    verifyUser,
+    upload.single("avatar"),
+    updateUserAvatar
+)
+router.route("/get-user-channel/:username").get(verifyUser,getUserChannelProfile)
+router.route("/get-watch-history").get(verifyUser,getWatchHistory)
 
 export default router 
