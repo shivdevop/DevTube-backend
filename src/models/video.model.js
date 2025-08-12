@@ -9,11 +9,17 @@ const videoSchema=new Schema({
         type:String, //cloudinary url
         required:true
     },
+    videoFilePublicId: { 
+        type: String 
+    },
+    thumbnailPublicId: { 
+        type: String 
+    },
     title:{
         type:String, 
         required:true
     },
-    desciption:{
+    description:{
         type:String, 
         required:true
     },

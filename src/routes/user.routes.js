@@ -22,7 +22,8 @@ router.route("/register").post(
     registerUser
 )
 
-router.route("/login").post(loginUser)
+router.route("/login").post(loginUser) 
+
 
 //secured route
 //we will user verifyUser middleware to protect this route
