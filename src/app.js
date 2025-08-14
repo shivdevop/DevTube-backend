@@ -25,12 +25,16 @@ app.use(cookieParser())
 //router import 
 import userRouter from "./routes/user.routes.js"
 import videoRouter from "./routes/video.routes.js"
-
+import likeRouter from "./routes/like.routes.js"
+import subscriptionRouter from "./routes/subscription.routes.js"
 //routes declaration
 
 //router ke liye hume middleware ki need hai, so we will use app.use()
 app.use("/api/v1/users",userRouter)
 app.use("/api/v1/videos",videoRouter)
+app.use("api/v1/likes",likeRouter)
+app.use("api/v1/subscriptions",subscriptionRouter)
+
 
 // /api/v1/users is like a prefix for all the routes in userRouter!!
 
