@@ -8,8 +8,8 @@ const router=Router()
 router.route("/toggle-like").post(verifyUser,toggleLike)
 
 //get likes for a video, comment or post 
-router.route("/video/:id").get(getLikes)
-router.route("/comment/:id").get(getLikes)
-router.route("/post/:id").get(getLikes)
+router.route("/video/:videoid").get(getLikes)
+router.route("/comment/:commentid").get(getLikes)
+router.route("/post/:postid").get(getLikes)
 
 export default router 

@@ -40,12 +40,12 @@ export const toggleLike=asyncHandler(async(req,res)=>{
 
 //get likes for a resource 
 export const getLikes=asyncHandler(async(req,res)=>{
-    const {video,comment,post}=req.params
+    const {videoid,commentid,postid}=req.params
     const filter={}
 
-    if (video) filter.video=video
-    if (comment) filter.comment=comment 
-    if (post) filter.post=post 
+    if (videoid) filter.video=videoid
+    if (commentid) filter.comment=commentid 
+    if (postid) filter.post=postid 
 
     const likes=await Like.find(filter).populate("likedBy","username avatar")
     return res.status(200).json(
