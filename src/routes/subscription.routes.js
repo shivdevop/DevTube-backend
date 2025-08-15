@@ -7,6 +7,7 @@ const router=Router()
 router.route("/:channelid").post(verifyUser,subscribe)
 router.route("/:channelid").delete(verifyUser,unsubscribe)
 router.route("/count/:channelid").get(getSubscriberCount)
-router.route("/my").get(verifyUser,getSubscriptions)
+router.route("/mySubscriptions").get(verifyUser,getSubscriptions)
 
 export default router
+

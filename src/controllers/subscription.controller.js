@@ -7,7 +7,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 //subscribe to a channel(which will be a ref to another user id basically)
 export const subscribe=asyncHandler(async(req,res)=>{
     const {channelid}=req.params
-    userid=req.user._id
+    const userid=req.user._id
     if (userid.toString()===channelid.toString()){
         throw new ApiError(400,"you cannot subscribe to yourself")
     }
@@ -26,7 +26,7 @@ export const subscribe=asyncHandler(async(req,res)=>{
 //unsubscribe from a channel 
 export const unsubscribe=asyncHandler(async(req,res)=>{
     const {channelid}=req.params
-    userid=req.user._id
+    const userid=req.user._id
 
     if (userid.toString()===channelid.toString()){
         throw new ApiError(400,"you cannot unsubscribe to yourself")
@@ -63,9 +63,9 @@ export const getSubscriberCount=asyncHandler(async(req,res)=>{
 
 //show list of channels you have subscribed to 
 export const getSubscriptions=asyncHandler(async(req,res)=>{
-    userid=req.user._id 
+    const userid=req.user._id 
     
-    const subscriptions=await Subscription.find({subscirber:userid}).populate("channel","username avatar")
+    const subscriptions=await Subscription.find({subscriber:userid}).populate("channel","username avatar")
     return res.status(200).json(
         new ApiResponse(200,subscriptions,"subscriptions fetched successfully")
     )

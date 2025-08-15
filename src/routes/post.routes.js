@@ -9,7 +9,7 @@ const router = Router();
 router.post("/create", verifyUser, upload.single("image"), createPost);
 
 // Delete a post
-router.delete("/:postid", verifyUser, deletePost);
+router.delete("/delete/:postid", verifyUser, deletePost);
 
 // Get paginated posts for a channel (public)
 router.get("/channel/:channelid", getChannelPosts);

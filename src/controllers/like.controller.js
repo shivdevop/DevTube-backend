@@ -8,6 +8,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 export const toggleLike=asyncHandler(async(req,res)=>{
 
     const {targetId,targetType}=req.body 
+    console.log(targetId)
 
     if (!["video","comment","post"].includes(targetType)){
         throw new ApiError(400,"invalid target type")
