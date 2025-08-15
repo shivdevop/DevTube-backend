@@ -27,7 +27,15 @@ const postSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "User"
       }
+    ],
+    //comments will be array of comment ids
+    comments:[
+        {
+            type:Schema.Types.ObjectId,
+            ref:"Comment"
+        }
     ]
+
   },
   { timestamps: true }
 );
