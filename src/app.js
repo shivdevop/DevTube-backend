@@ -30,6 +30,7 @@ import subscriptionRouter from "./routes/subscription.routes.js"
 import postRouter from "./routes/post.routes.js"
 import commentRouter from "./routes/comment.routes.js"
 import playlistRouter from "./routes/playlist.routes.js"
+import dashboardRouter from "./routes/dashboard.routes.js"
 //routes declaration
 
 //router ke liye hume middleware ki need hai, so we will use app.use()
@@ -40,6 +41,7 @@ app.use("/api/v1/subscriptions",subscriptionRouter)
 app.use("/api/v1/posts",postRouter)
 app.use("/api/v1/comments",commentRouter)
 app.use("/api/v1/playlists",playlistRouter)
+app.use("/api/v1/dashboard",dashboardRouter)
 // /api/v1/users is like a prefix for all the routes in userRouter!!
 
 
