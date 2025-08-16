@@ -36,7 +36,7 @@ src/
 1. Clone the repository:
    ```bash 
    git clone https://github.com/yourusername/devtube-backend.git
-cd devtube-backend
+   cd devtube-backend
    ```
 2. Install dependencies:
    ```bash 
