@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import {errorHandler} from "./utils/errorHandler.js"
+// import { swaggerUiServe, swaggerUiSetup } from "./swagger.js";
 
 const app=express() 
 
@@ -44,11 +45,14 @@ app.use("/api/v1/playlists",playlistRouter)
 app.use("/api/v1/dashboard",dashboardRouter)
 // /api/v1/users is like a prefix for all the routes in userRouter!!
 
+// app.use("/api-docs", swaggerUiServe, swaggerUiSetup);
+
 
 
 //http://localhost:8000/api/v1/users/register
 
 app.use(errorHandler)
+    
 
 export {app}
 

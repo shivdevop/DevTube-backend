@@ -8,6 +8,7 @@ import { refreshAccessToken } from "../controllers/user.controller.js"
 
 const router =Router()
 
+
 router.route("/register").post(
     upload.fields([
         {
@@ -41,4 +42,4 @@ router.route("/update-avatar").put(
 router.route("/get-user-channel/:username").get(verifyUser,getUserChannelProfile)
 router.route("/get-watch-history").get(verifyUser,getWatchHistory)
 
-export default router 
+export default router
