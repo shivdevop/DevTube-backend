@@ -1,128 +1,135 @@
-# DevTube Backend 🎬
+# DevTube Backend
 
-A production-ready backend for DevTube, a developer-focused video-sharing platform inspired by YouTube. This backend is built with Node.js, Express, MongoDB, Mongoose, JWT authentication, and Cloudinary for media uploads.
+A scalable backend for a YouTube-like platform, built with Node.js, Express, and MongoDB. Features include user authentication, video uploads, playlists, posts, comments, likes, and subscriptions.
 
-## 🚀 Features
-- User authentication (JWT, access & refresh tokens)
-- Video upload & management
-- Like/dislike system
-- Comments system
-- Posts (community updates)
-- Playlists management
-- Subscriptions
-- Dashboard with analytics (views, likes, recent activity)
+## Features
+- User registration, login, and profile management
+- Video upload, retrieval, update, and deletion
+- Playlist creation, management, privacy toggling
+- Posts with image support
+- Comments and replies
+- Like/unlike for videos, posts, and comments
+- Channel subscriptions
 
-## 🛠️ Tech Stack
-- Backend: Node.js, Express.js
-- Database: MongoDB, Mongoose
-- Auth: JWT (Access + Refresh Tokens)
-- Media: Cloudinary
-- Validation: Zod / Joi (whichever you’ve added)
-- Documentation: README (Swagger pending)
+## Tech Stack
+- Node.js
+- Express.js
+- MongoDB & Mongoose
+- JWT Authentication
+- Multer (file uploads)
+- Cloudinary (media storage)
 
-## 📂 Project Structure
+## Project Structure
+```
 src/
-│── controllers/    # Route handlers
-│── models/         # Mongoose models
-│── routes/         # API routes
-│── middlewares/    # Middleware (auth, validation, etc.)
-│── utils/          # Helpers (cloudinary, asyncHandler, etc.)
-│── validators/     # Request validation schemas
-│── index.js        # Entry point
-
-## ⚙️ Installation
-```bash
-git clone https://github.com/yourusername/devtube-backend.git
-cd devtube-backend
-npm install
-npm run dev
+├── controllers/
+├── models/
+├── routes/
+├── middlewares/
+├── utils/
+├── validators/
+├── app.js
+├── index.js
 ```
 
-## 🔑 Environment Variables
-Create a .env file in root:
+## Installation
+1. Clone the repository:
+   ```bash
+git clone https://github.com/yourusername/devtube-backend.git
+cd devtube-backend
+```
+2. Install dependencies:
+   ```bash
+npm install
+```
+3. Set up your `.env` file (see below).
+4. Start the server:
+   ```bash
+npm start
+```
+
+## Environment Variables
+Create a `.env` file in the root directory with the following:
+```
 PORT=8000
-MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/devtube
-ACCESS_TOKEN_SECRET=youraccesstokensecret
-REFRESH_TOKEN_SECRET=yourrefreshtokensecret
-ACCESS_TOKEN_EXPIRY=15m
-REFRESH_TOKEN_EXPIRY=7d
-CLOUDINARY_CLOUD_NAME=yourcloudname
-CLOUDINARY_API_KEY=yourapikey
-CLOUDINARY_API_SECRET=yourapisecret
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+CORS_ORIGIN=http://localhost:3000
+```
 
-## 📡 API Endpoints
-Auth & Users
-POST   /api/v1/users/register        # Register new user
-POST   /api/v1/users/login           # Login
-POST   /api/v1/users/logout          # Logout
-GET    /api/v1/users/me              # Get logged-in user profile
-PUT    /api/v1/users/update-profile  # Update profile
+## API Endpoints
+### User
+- `POST /api/v1/users/register` — Register
+- `POST /api/v1/users/login` — Login
+- `GET /api/v1/users/profile/:userid` — Get profile
+- `PUT /api/v1/users/profile/update` — Update profile
+- `POST /api/v1/users/avatar` — Upload avatar
 
-Videos
-POST   /api/v1/videos/               # Upload video
-GET    /api/v1/videos/:id            # Get video details
-PUT    /api/v1/videos/:id            # Update video
-DELETE /api/v1/videos/:id            # Delete video
-GET    /api/v1/videos/               # List all videos
+### Video
+- `POST /api/v1/videos/upload` — Upload video
+- `GET /api/v1/videos/:videoid` — Get video details
+- `GET /api/v1/videos/channel/:channelid` — Channel videos
+- `DELETE /api/v1/videos/:videoid` — Delete video
+- `PUT /api/v1/videos/:videoid` — Update video
 
-Likes
-POST   /api/v1/likes/toggle          # Like/Dislike a video
-GET    /api/v1/likes/:videoId        # Get likes for video
+### Playlist
+- `POST /api/v1/playlists/create` — Create playlist
+- `GET /api/v1/playlists/user/:userId` — User playlists
+- `GET /api/v1/playlists/:playlistId` — Playlist by ID
+- `POST /api/v1/playlists/:playlistId/add/:videoId` — Add video
+- `DELETE /api/v1/playlists/:playlistId/remove/:videoId` — Remove video
+- `PUT /api/v1/playlists/:playlistId` — Update playlist
+- `DELETE /api/v1/playlists/:playlistId` — Delete playlist
+- `GET /api/v1/playlists/public` — Public playlists
+- `PATCH /api/v1/playlists/:playlistId/toggle-privacy` — Toggle privacy
 
-Comments
-POST   /api/v1/comments/:videoId     # Add comment
-GET    /api/v1/comments/:videoId     # Get comments for video
-DELETE /api/v1/comments/:id          # Delete comment
+### Post
+- `POST /api/v1/posts/create` — Create post
+- `DELETE /api/v1/posts/delete/:postid` — Delete post
+- `GET /api/v1/posts/channel/:channelid` — Channel posts
 
-Posts
-POST   /api/v1/posts/                # Create post
-GET    /api/v1/posts/                # Get all posts
-DELETE /api/v1/posts/:id             # Delete post
+### Comment
+- `POST /api/v1/comments/post` — Create comment
+- `DELETE /api/v1/comments/delete/:commentid` — Delete comment
+- `GET /api/v1/comments?targetType=Video|Post|Comment&targetId=...` — Get comments
+- `GET /api/v1/comments/replies/:commentId` — Get replies
 
-Playlists
-POST   /api/v1/playlists/            # Create playlist
-GET    /api/v1/playlists/:id         # Get playlist
-PUT    /api/v1/playlists/:id         # Update playlist
-DELETE /api/v1/playlists/:id         # Delete playlist
+### Like
+- `POST /api/v1/likes/toggle-like` — Like/unlike
+- `GET /api/v1/likes/video/:videoid` — Video likes
+- `GET /api/v1/likes/comment/:commentid` — Comment likes
+- `GET /api/v1/likes/post/:postid` — Post likes
 
-Subscriptions
-POST   /api/v1/subscriptions/:id     # Subscribe to user
-DELETE /api/v1/subscriptions/:id     # Unsubscribe
-GET    /api/v1/subscriptions/me      # Get my subscriptions
+### Subscription
+- `POST /api/v1/subscriptions/:channelid` — Subscribe
+- `DELETE /api/v1/subscriptions/:channelid` — Unsubscribe
+- `GET /api/v1/subscriptions/count/:channelid` — Subscriber count
+- `GET /api/v1/subscriptions/mySubscriptions` — My subscriptions
 
-Dashboard
-GET    /api/v1/dashboard/analytics   # Get analytics (views, likes, subs)
-GET    /api/v1/dashboard/activity    # Get recent activity
+## Example API Calls
+```bash
+# Register a user
+curl -X POST http://localhost:8000/api/v1/users/register -F "fullname=John Doe" -F "username=johndoe" -F "email=john@example.com" -F "password=yourpassword" -F "avatar=@/path/to/avatar.jpg"
 
-## 📬 Example API Call
-Register User
-POST /api/v1/users/register
-Content-Type: application/json
-{
-  "username": "shivam",
-  "email": "shivam@example.com",
-  "password": "mypassword"
-}
+# Upload a video
+curl -X POST http://localhost:8000/api/v1/videos/upload -H "Authorization: Bearer <token>" -F "title=My Video" -F "videoFile=@/path/to/video.mp4"
+```
 
-Response
-{
-  "success": true,
-  "user": {
-    "id": "64c1234567890",
-    "username": "shivam",
-    "email": "shivamexample.com"
-  },
-  "tokens": {
-    "accessToken": "xxxx",
-    "refreshToken": "xxxx"
-  }
-}
+## Authentication
+Most endpoints require JWT authentication. Pass the token in the `Authorization` header:
+```
+Authorization: Bearer <your_token>
+```
 
-## 🛡️ Authentication
-All protected routes require JWT token in header:
-Authorization: Bearer <access_token>
+## Future Work
+- Add unit & integration tests
+- Improve error handling
+- Add more analytics endpoints
+- Enhance documentation
 
-## 📊 Future Work
-Add Swagger docs (/api-docs)
-Add unit & integration tests
-CI/CD pipeline
+---
+
+For questions or contributions, feel free to open an issue or pull request.
