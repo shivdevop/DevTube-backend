@@ -2,6 +2,11 @@
 
 A scalable backend for a YouTube-like platform, built with Node.js, Express, and MongoDB. Features include user authentication, video uploads, playlists, posts, comments, likes, and subscriptions.
 
+## 🚀 API Documentation
+You can explore the full API documentation and test endpoints directly in Postman:
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/15270926/2sB3BHm9VV)
+
 ## Features
 - User registration, login, and profile management
 - Video upload, retrieval, update, and deletion
