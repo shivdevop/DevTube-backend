@@ -133,14 +133,15 @@ src/
 ## Example API Calls
 ```bash
 # Register a user
-curl -X POST http://localhost:8000/api/v1/users/register -F "fullname=John Doe" -F "username=johndoe" -F "email=john@example.com" -F "password=yourpassword" -F "avatar=@/path/to/avatar.jpg"
+curl -X POST https://devtube-backend-717e.onrender.com/api/v1/users/register -F "fullname=John Doe" -F "username=johndoe" -F "email=john@example.com" -F "password=yourpassword" -F "avatar=@/path/to/avatar.jpg"
 
 # Upload a video
-curl -X POST http://localhost:8000/api/v1/videos/upload -H "Authorization: Bearer <token>" -F "title=My Video" -F "videoFile=@/path/to/video.mp4"
+curl -X POST https://devtube-backend-717e.onrender.com/api/v1/videos/upload-video -H "Authorization: Bearer <token>" -F "title=My Video" -F "videoFile=@/path/to/video.mp4"
+
 ```
 
 ## Authentication
-Most endpoints require JWT authentication. Pass the token in the `Authorization` header:
+Most endpoints require JWT authentication. If you are logged in, your access token will be automatically fetched from the cookies else you need to pass the token in the `Authorization` header:
 ```
 Authorization: Bearer <your_token>
 ```
