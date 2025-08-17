@@ -73,27 +73,31 @@ src/
 ### User
 - `POST /api/v1/users/register` — Register
 - `POST /api/v1/users/login` — Login
-- `GET /api/v1/users/profile/:userid` — Get profile
-- `PUT /api/v1/users/profile/update` — Update profile
-- `POST /api/v1/users/avatar` — Upload avatar
+- `POST /api/v1/users/logout` — Logout
+- `POST /api/v1/users/change-password` — Change password
+- `GET /api/v1/users/current-user` — Get current user
+- `PUT /api/v1/users/update-account-details` — Update account details
+- `PUT /api/v1/users/update-avatar` — Update avatar
+- `PUT /api/v1/users/refresh-access-token` — Refresh access token
+- `GET /api/v1/users/get-user-channel/:username` — Get user channel
+
 
 ### Video
-- `POST /api/v1/videos/upload` — Upload video
-- `GET /api/v1/videos/:videoid` — Get video details
-- `GET /api/v1/videos/channel/:channelid` — Channel videos
+- `POST /api/v1/videos/upload-video` — Upload video
+- `GET /api/v1/videos/` — Get videos feed
+- `GET /api/v1/videos/:videoid` — Get video by id
 - `DELETE /api/v1/videos/:videoid` — Delete video
-- `PUT /api/v1/videos/:videoid` — Update video
+- `PATCH /api/v1/videos/:videoid` — Update video
 
 ### Playlist
-- `POST /api/v1/playlists/create` — Create playlist
-- `GET /api/v1/playlists/user/:userId` — User playlists
-- `GET /api/v1/playlists/:playlistId` — Playlist by ID
-- `POST /api/v1/playlists/:playlistId/add/:videoId` — Add video
-- `DELETE /api/v1/playlists/:playlistId/remove/:videoId` — Remove video
-- `PUT /api/v1/playlists/:playlistId` — Update playlist
-- `DELETE /api/v1/playlists/:playlistId` — Delete playlist
-- `GET /api/v1/playlists/public` — Public playlists
-- `PATCH /api/v1/playlists/:playlistId/toggle-privacy` — Toggle privacy
+- `POST /api/v1/playlists/newPlaylist` — Create a new playlist
+- `GET /api/v1/playlists/userPlaylists/:userId` — Get all playlists of a user
+- `GET /api/v1/playlists/:playlistId` — Get playlist by ID
+- `POST /api/v1/playlists/:playlistId/addVideo/:videoId` — Add a video to playlist
+- `DELETE /api/v1/playlists/:playlistId/removeVideo/:videoId` — Remove a video from playlist
+- `PATCH /api/v1/playlists/update/:playlistId` — Update playlist details
+- `DELETE /api/v1/playlists/delete/:playlistId` — Delete a playlist
+- `PUT /api/v1/playlists/togglePrivacy/:playlistId` — Toggle privacy (public/private) of playlist
 
 ### Post
 - `POST /api/v1/posts/create` — Create post
@@ -102,21 +106,25 @@ src/
 
 ### Comment
 - `POST /api/v1/comments/post` — Create comment
+- `POST /api/v1/comments/post` — Create reply to a comment
 - `DELETE /api/v1/comments/delete/:commentid` — Delete comment
-- `GET /api/v1/comments?targetType=Video|Post|Comment&targetId=...` — Get comments
+- `GET /api/v1/comments?targetType=Video|Post|Comment&targetId=...` — Get comments for a Post/Video/Comment
 - `GET /api/v1/comments/replies/:commentId` — Get replies
 
 ### Like
-- `POST /api/v1/likes/toggle-like` — Like/unlike
-- `GET /api/v1/likes/video/:videoid` — Video likes
-- `GET /api/v1/likes/comment/:commentid` — Comment likes
-- `GET /api/v1/likes/post/:postid` — Post likes
+- `POST /api/v1/likes/toggle-like` — Toggle like for a video, post, or comment
+- `GET /api/v1/likes/video/:videoid` — Get likes for a video
+- `GET /api/v1/likes/comment/:commentid` — Get likes for a comment 
 
 ### Subscription
 - `POST /api/v1/subscriptions/:channelid` — Subscribe
 - `DELETE /api/v1/subscriptions/:channelid` — Unsubscribe
-- `GET /api/v1/subscriptions/count/:channelid` — Subscriber count
+- `GET /api/v1/subscriptions/count/:channelid` — Subscriber count for a channel 
 - `GET /api/v1/subscriptions/mySubscriptions` — My subscriptions
+
+### Dashboard
+- `GET /api/v1/dashboard/` — Get dashboard data
+
 
 ## Example API Calls
 ```bash
