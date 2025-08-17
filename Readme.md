@@ -1,4 +1,8 @@
 # DevTube Backend
+![Node.js](https://img.shields.io/badge/Node.js-18.x-green) 
+![Express](https://img.shields.io/badge/Express.js-Backend-blue) 
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-green) 
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
 A scalable backend for a YouTube-like platform, built with Node.js, Express, and MongoDB. Features include user authentication, video uploads, playlists, posts, comments, likes, and subscriptions.
 
